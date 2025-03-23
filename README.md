@@ -6,7 +6,7 @@ This is a simple Student Management API built with Golang, Gin, GORM, AWS S3, an
 ### Features
 - Create, Read, Update, and Delete (CRUD) students
 - Upload student photos to AWS S3
-- Store student data in MySQL and cache in Redis
+- Store student data in MySQL/MariaDB and cache in Redis
 
 ### Prerequisites
 - Docker
