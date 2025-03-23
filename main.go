@@ -8,7 +8,6 @@ import (
   "log"
   "net/http"
   "os"
-  "strconv"
 
   "github.com/aws/aws-sdk-go/aws"
   "github.com/aws/aws-sdk-go/aws/credentials"
@@ -89,20 +88,28 @@ func initS3() {
 
 // Upload Photo to AWS S3
 func uploadPhoto(file io.Reader, fileName string) (string, error) {
-  bucket := os.Getenv("AWS_BUCKET_NAME")
+    bucket := os.Getenv("AWS_BUCKET_NAME")
 
-  _, err := s3Client.PutObject(&s3.PutObjectInput{
-    Bucket: aws.String(bucket),
-    Key:    aws.String(fileName),
-    Body:   file,
-    ACL:    aws.String("public-read"),
-  })
-  if err != nil {
-    return "", err
-  }
+    // Baca file ke dalam buffer agar bisa digunakan sebagai ReadSeeker
+    buf, err := io.ReadAll(file)
+    if err != nil {
+        return "", err
+    }
+    fileReader := bytes.NewReader(buf)
 
-  return fmt.Sprintf("https://%s.s3.amazonaws.com/%s", bucket, fileName), nil
+    _, err = s3Client.PutObject(&s3.PutObjectInput{
+        Bucket: aws.String(bucket),
+        Key:    aws.String(fileName),
+        Body:   fileReader, // Menggunakan bytes.Reader yang mengimplementasikan io.ReadSeeker
+        ACL:    aws.String("public-read"),
+    })
+    if err != nil {
+        return "", err
+    }
+
+    return fmt.Sprintf("https://%s.s3.amazonaws.com/%s", bucket, fileName), nil
 }
+
 
 // Create Student (with Photo Upload)
 func createStudent(c *gin.Context) {
