@@ -80,9 +80,6 @@ services:
     build: .
     ports:
       - "8080:8080"
-    depends_on:
-      - db
-      - redis
     environment:
       - DB_USER=root
       - DB_PASS=password
@@ -94,19 +91,4 @@ services:
       - AWS_ACCESS_KEY=your_access_key
       - AWS_SECRET_KEY=your_secret_key
       - AWS_BUCKET_NAME=your_bucket_name
-    restart: always
-
-  db:
-    image: mariadb:latest
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=student_db
-    ports:
-      - "3306:3306"
-    restart: always
-
-  redis:
-    image: redis:latest
-    ports:
-      - "6379:6379"
     restart: always
