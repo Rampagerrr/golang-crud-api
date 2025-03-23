@@ -47,6 +47,10 @@ AWS_BUCKET_NAME=your_bucket_name
 | DELETE | `/students/:id`        | Delete student          |
 | GET    | `/students/cache/:id`  | Get student from cache  |
 
+3. Stop the container:
+   ```sh
+   docker-compose down
+   ```
 ---
 
 # Dockerfile
