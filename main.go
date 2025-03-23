@@ -125,6 +125,7 @@ func createStudent(c *gin.Context) {
 
   photoURL, err := uploadPhoto(file, header.Filename)
   if err != nil {
+    log.Fatal("Failed to upload photo: ", err)
     c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to upload photo"})
     return
   }
