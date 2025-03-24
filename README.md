@@ -56,8 +56,8 @@ AWS_BUCKET_NAME=your_bucket_name
 # Dockerfile
 
 ```dockerfile
-# Use the official Golang 1.22 image as a base
-FROM golang:1.22 as builder
+# Use the official Golang 1.23 image as a base
+FROM golang:1.23 as builder
 
 WORKDIR /app
 
