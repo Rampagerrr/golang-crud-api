@@ -15,6 +15,7 @@ import (
   "github.com/aws/aws-sdk-go/aws/session"
   "github.com/aws/aws-sdk-go/service/s3"
   "github.com/gin-gonic/gin"
+  "github.com/gin-contrib/cors"
   "github.com/go-redis/redis/v8"
   "gorm.io/driver/mysql"
   "gorm.io/gorm"
@@ -223,6 +224,16 @@ func main() {
   initS3()
 
   r := gin.Default()
+
+  // Enable CORS Middleware
+  r.Use(cors.New(cors.Config{
+    AllowOrigins:     []string{"*"}, // Allow all origins (can be changed to specific domains)
+    AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+    AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+    ExposeHeaders:    []string{"Content-Length"},
+    AllowCredentials: true,
+  }))
+  
   r.POST("/students", createStudent)
   r.GET("/students", getStudents)
   r.GET("/students/:id", getStudentByID)
