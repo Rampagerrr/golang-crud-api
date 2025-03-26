@@ -3,7 +3,6 @@ package main
 import (
   "bytes"
   "crypto/tls"
-  "context"
   "encoding/json"
   "fmt"
   "io"
