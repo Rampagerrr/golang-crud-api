@@ -2,6 +2,7 @@ package main
 
 import (
   "bytes"
+  "crypto/tls"
   "context"
   "encoding/json"
   "fmt"
@@ -17,6 +18,7 @@ import (
   "github.com/gin-gonic/gin"
   "github.com/gin-contrib/cors"
   "github.com/go-redis/redis/v8"
+  "golang.org/x/net/context"
   "gorm.io/driver/mysql"
   "gorm.io/gorm"
 )
@@ -57,18 +59,21 @@ func initDB() {
   db.AutoMigrate(&Student{})
 }
 
-// Initialize Redis Connection
+// Initialize Redis Connection with TLS
 func initRedis() {
-  rdb = redis.NewClient(&redis.Options{
-    Addr:     os.Getenv("REDIS_ADDR"),
-    Password: "",
-    DB:       0,
-  })
+	rdb = redis.NewClient(&redis.Options{
+		Addr:      os.Getenv("REDIS_ADDR"), // Example: "your-redis-endpoint.cache.amazonaws.com:6379"
+		Password:  "",                      // Set if needed
+		DB:        0,
+		TLSConfig: &tls.Config{},           // Enable TLS
+	})
 
-  _, err := rdb.Ping(ctx).Result()
-  if err != nil {
-    log.Fatal("Failed to connect to Redis:", err)
-  }
+	_, err := rdb.Ping(ctx).Result()
+	if err != nil {
+		log.Fatal("Failed to connect to Redis:", err)
+	} else {
+		log.Println("Connected to Redis with TLS successfully!")
+	}
 }
 
 // Initialize AWS S3
